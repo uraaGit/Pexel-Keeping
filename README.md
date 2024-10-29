@@ -22,6 +22,9 @@ An add-on that arrange faces in UV space to maintain a specified pixel count.
    
 ![pk_menu](https://github.com/user-attachments/assets/be9714f6-1b28-464d-841b-2b5d496346ab)
 
+![image](https://github.com/user-attachments/assets/c36f39da-142b-4774-9e39-af6708907a00)
+
+
 ## Note
 
 - Please refrain from painting in UV space when using this add-on.
