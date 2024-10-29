@@ -11,7 +11,7 @@ An add-on that arrange faces in UV space to maintain a specified pixel count.
 ### Import
 1. Download the .py code
 2. Launch Blender
-3. Open the Preference and Add-ons section, then install zip file or .py code
+3. Open the Preference and Add-ons section, then install .py code
 4. Enable Pixel Keeping, switch the mesh object to Edit Mode, and select"Arrange face to UV" in the UV menu
 
 ### Operator Panel
