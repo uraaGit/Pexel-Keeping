@@ -1,10 +1,12 @@
 # Pixel Keeping
 
+![pk_window](https://github.com/user-attachments/assets/9688b0f4-a8f8-4a30-999c-96ab7dd5c7f2)
+
 This was developed in the Blender 4.2.0 environment.
 
 ## Usage
 
-An add-on that unwrap UVs to keep pixel evently arranged on quad faces.
+An add-on that arrange faces in UV space to maintain a specified pixel count.
 
 ### Import
 1. Download the zip file or .py code
@@ -24,5 +26,9 @@ An add-on that unwrap UVs to keep pixel evently arranged on quad faces.
 
 - Please refrain from painting in UV space when using this add-on.
 - If the face index changes, the arrangement will change, and the texture prograssion will reset.
+
+## License
+
+GPL-3.0
 
    
