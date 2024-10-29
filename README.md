@@ -15,7 +15,7 @@ An add-on that arrange faces in UV space to maintain a specified pixel count.
 4. Enable Pixel Keeping, switch the mesh object to Edit Mode, and select"Arrange face to UV" in the UV menu
 
 ### Operator Panel
-- UV Number      :   Increase UV map attribute. Used in conjection with UDIM, like layers in paint software. Supports up to 8 UV maps.
+- UV Number      :   Add or reduce UV map attribute. Used in conjection with UDIM, like layers in paint software. Supports up to 8 UV maps.
 - texture Size   :   Supports texture sizes of 256, 512, 1024, 2048. Adjust according to your desired texture size.
 - Pixel Count    :   Faces can keep pixel counts of 4x4, 8x8, 16x16, 32x32.
 - Margin         :   Margin with adjucent faces.
