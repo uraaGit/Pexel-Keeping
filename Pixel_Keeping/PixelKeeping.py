@@ -27,7 +27,7 @@ from math import sqrt
 
 class UV_OT_uv_pixel_keeping(bpy.types.Operator):
     bl_idname="uv.uv_pixel_keeping"
-    bl_label="Arranging faces to UV"
+    bl_label="Arrange faces to UV"
     bl_options={'REGISTER','UNDO'}
 
     uv_number:bpy.props.IntProperty(
