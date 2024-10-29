@@ -4,7 +4,7 @@ This was developed in the Blender 4.2.0 environment.
 
 ## Usage
 
-An add-on that unwrap UVs to keep pixel evently distributed on quad faces.
+An add-on that unwrap UVs to keep pixel evently arranged on quad faces.
 
 ### Import
 1. Download the zip file or .py code
