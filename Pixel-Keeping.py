@@ -71,9 +71,6 @@ keep_pix="pixel_keeping"
 
 def arrange_faces_uv(uv_num,t,sub,mrgn):
     obj=bpy.context.active_object
-    if obj and obj.type=='MESH':
-        pre_uv=obj.data.face_pixel.pre_uv
-        pre_uv.clear()
 
     if obj and obj.type=='MESH':
         bpy.ops.object.mode_set(mode='EDIT')
