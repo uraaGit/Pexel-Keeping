@@ -24,6 +24,14 @@ pixel_count=[
 import bpy
 import bmesh
 from math import sqrt
+from mathutils import Vector
+
+class pre_UV_item(bpy.types.PropertyGroup):
+    co:bpy.props.FloatVectorProperty(size=2)
+
+class Pre_UV(bpy.types.PropertyGroup):
+    pre_uv:bpy.props.CollectionProperty(type=pre_UV_item)
+    index:bpy.props.IntProperty()
 
 class UV_OT_uv_pixel_keeping(bpy.types.Operator):
     bl_idname="uv.uv_pixel_keeping"
@@ -68,51 +76,70 @@ class UV_OT_uv_pixel_keeping(bpy.types.Operator):
 
 keep_pix="pixel_keeping"
 
+
 def arrange_faces_uv(uv_num,t,sub,mrgn):
     obj=bpy.context.active_object
+    if obj and obj.type=='MESH':
+        pre_uv=obj.data.face_pixel.pre_uv
+        pre_uv.clear()
 
     if obj and obj.type=='MESH':
         bpy.ops.object.mode_set(mode='EDIT')
+
+        bit=1/t
+        mapchip=bit*sub
+        margin=bit*mrgn
+        offset=mapchip+margin
+
+        turn_co=t/(sub+mrgn)
+        print(turn_co)
+
+        uv_co=[]
+        uv_co.clear()
+
+        for ii in range(int(turn_co)-1):
+            for jj in range(int(turn_co)-1):
+                uv_co.append((ii*offset+offset/2,jj*offset+offset/2))
+
+        # for _ in uv_co:
+        #     print(_)
+
+
+        x,y=0,0
+        u,v=0,0
 
         for uv_num in range(uv_num):
             if keep_pix+f".{uv_num}" not in obj.data.uv_layers:
                 obj.data.uv_layers.new(name=keep_pix+f".{uv_num}",do_init=True)
 
             bm=bmesh.from_edit_mesh(obj.data)
-
             fp_layer=bm.loops.layers.uv[keep_pix+f".{uv_num}"]
 
-            s=t/sub
-            margin=mrgn/sub
-            offset=margin/s
-
-            x,y=0,0
-            u,v=0,0
-            uu,vv=0,0
-
-            uu=uv_num%10
-            vv=uv_num//10
-
             for face in bm.faces:
+                if len(pre_uv)<len(bm.faces):
+                    pre_uv.add()
+
+                face_x=sum(loop[fp_layer].uv.x for loop in face.loops)/len(face.loops)
+                face_y=sum(loop[fp_layer].uv.y for loop in face.loops)/len(face.loops)
+                pre_uv[face.index].co=Vector((face_x,face_y))
+                
                 if len(face.loops)!=4:
                     continue
 
-                bind_loops=[(u,v),(1+u,v),(1+u,1+v),(u,1+v)]
+                if len(bm.faces)>len(uv_co):
+                    bpy.context.window_manager.popup_menu(lambda self,context: self.layout.label(text="Error: Not enough UV coodinates for faces. Reduce Texture Size or Pixel Count."),title="UV Error",icon='ERROR')
+                    return
+
+                u,v=uv_co[face.index]
+
+                bind_loops=[(u-mapchip/2,v-mapchip/2),(u+mapchip/2,v-mapchip/2),(u+mapchip/2,v+mapchip/2),(u-mapchip/2,v+mapchip/2)]
                     
                 for i,loop in enumerate(face.loops):
                     uv=loop[fp_layer].uv
                     x,y=bind_loops[i]
 
-                    uv.x=(x/s)+uu+offset*(u+1)
-                    uv.y=(y/s)+vv+offset*(v+1)
-
-                if (v+2)*(1+margin)+1>s+margin:
-                    u+=1
-                    v=0
-                else:
-                    v+=1
-                
-        
+                    uv.x=x+margin
+                    uv.y=y+margin
 
             bmesh.update_edit_mesh(obj.data)
 
@@ -122,12 +149,17 @@ def menu_func(self,context):
     layout.operator(UV_OT_uv_pixel_keeping.bl_idname,text="Arrange faces to uv")
 
 def register():
+    bpy.utils.register_class(pre_UV_item)
+    bpy.utils.register_class(Pre_UV)
     bpy.utils.register_class(UV_OT_uv_pixel_keeping)
     bpy.types.VIEW3D_MT_uv_map.append(menu_func)
+    bpy.types.Mesh.face_pixel=bpy.props.PointerProperty(type=Pre_UV)
 
 def unregister():
     bpy.types.VIEW3D_MT_uv_map.remove(menu_func)
     bpy.utils.unregister_class(UV_OT_uv_pixel_keeping)
+    bpy.utils.unregister_class(Pre_UV)
+    bpy.utils.unregister_class(pre_UV_item)
 
 if __name__=="__main__":
     register()
