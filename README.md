@@ -1,5 +1,7 @@
 # Pixel Keeping
 
+![pk_explain](https://github.com/user-attachments/assets/c52e30a2-6b7f-4de2-a379-fac63c0005b3)
+
 ![pk_window](https://github.com/user-attachments/assets/9688b0f4-a8f8-4a30-999c-96ab7dd5c7f2)
 
 This was developed in the Blender 4.2.0 environment.
