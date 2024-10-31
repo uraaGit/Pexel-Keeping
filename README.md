@@ -30,7 +30,7 @@ An add-on that arrange faces in UV space to maintain a specified pixel count.
 ## Note
 
 - Please refrain from painting in UV space when using this add-on.
-- If the face index changes, the arrangement will change, and the texture prograssion will reset.
+- ~~If the face index changes, the arrangement will change, and the texture prograssion will reset.~~(fixed...maybe)
 
 ## License
 
