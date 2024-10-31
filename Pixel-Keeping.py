@@ -1,7 +1,7 @@
 bl_info={
     "name":"Pixel Keeping",
     "author":"ura",
-    "version":(1,1,0),
+    "version":(1,1,1),
     "blender":(4,2,0),
     "location":"UV Editor",
     "category":"UV"
@@ -25,6 +25,7 @@ import bpy
 import bmesh
 from math import sqrt
 from mathutils import Vector
+from collections import defaultdict
 
 class UV_OT_uv_pixel_keeping(bpy.types.Operator):
     bl_idname="uv.uv_pixel_keeping"
@@ -89,6 +90,9 @@ def arrange_faces_uv(uv_num,t,sub,mrgn):
         fp_layer=bm.loops.layers.uv[keep_pix+f".{uv_num}"]
 
         uv_co=[(ii*offset+offset/2+margin,jj*offset+offset/2+margin) for ii in range(int(turn_co)-1) for jj in range(int(turn_co)-1)]
+
+        pre_co_count=defaultdict(int)
+            
         face_co=[
             (sum(loop[fp_layer].uv.x for loop in face.loops)/len(face.loops),
             sum(loop[fp_layer].uv.y for loop in face.loops)/len(face.loops))
@@ -105,6 +109,7 @@ def arrange_faces_uv(uv_num,t,sub,mrgn):
 
                 if pre_co in uv_co:
                     u,v=uv_co[uv_co.index(pre_co)]
+                    uv_co.remove(pre_co)
                 else:
                     u,v=unused_co[0]
                     unused_co.pop(0)
