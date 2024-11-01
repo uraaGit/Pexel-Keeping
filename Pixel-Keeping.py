@@ -1,7 +1,7 @@
 bl_info={
     "name":"Pixel Keeping",
     "author":"ura",
-    "version":(1,1,1),
+    "version":(1,1,2),
     "blender":(4,2,0),
     "location":"UV Editor",
     "category":"UV"
@@ -82,25 +82,23 @@ def arrange_faces_uv(uv_num,t,sub,mrgn):
         offset=mapchip+margin
 
         turn_co=t/(sub+mrgn)
-
-        if keep_pix+f".{uv_num}" not in obj.data.uv_layers:
-            obj.data.uv_layers.new(name=keep_pix+f".{uv_num}",do_init=True)
-
-        bm=bmesh.from_edit_mesh(obj.data)
-        fp_layer=bm.loops.layers.uv[keep_pix+f".{uv_num}"]
-
-        uv_co=[(ii*offset+offset/2+margin,jj*offset+offset/2+margin) for ii in range(int(turn_co)-1) for jj in range(int(turn_co)-1)]
-
-        pre_co_count=defaultdict(int)
-            
-        face_co=[
-            (sum(loop[fp_layer].uv.x for loop in face.loops)/len(face.loops),
-            sum(loop[fp_layer].uv.y for loop in face.loops)/len(face.loops))
-            for face in bm.faces for loop in face.loops]
-
-        unused_co=[uv for uv in uv_co if uv not in face_co]
-
+        
         for uv_num in range(uv_num):
+            if keep_pix+f".{uv_num}" not in obj.data.uv_layers:
+                obj.data.uv_layers.new(name=keep_pix+f".{uv_num}",do_init=True)
+
+            bm=bmesh.from_edit_mesh(obj.data)
+            fp_layer=bm.loops.layers.uv[keep_pix+f".{uv_num}"]
+            
+            uv_co=[(ii*offset+offset/2+margin+uv_num,jj*offset+offset/2+margin) for ii in range(int(turn_co)-1) for jj in range(int(turn_co)-1)]
+            
+            face_co=[
+                (sum(loop[fp_layer].uv.x for loop in face.loops)/len(face.loops),
+                sum(loop[fp_layer].uv.y for loop in face.loops)/len(face.loops))
+                for face in bm.faces for loop in face.loops]
+
+            unused_co=[uv for uv in uv_co if uv not in face_co]
+
             for face in bm.faces:
 
                 face_x=sum(loop[fp_layer].uv.x for loop in face.loops)/len(face.loops)
@@ -113,8 +111,6 @@ def arrange_faces_uv(uv_num,t,sub,mrgn):
                 else:
                     u,v=unused_co[0]
                     unused_co.pop(0)
-
-                
                 
                 if len(face.loops)!=4:
                     continue
@@ -136,11 +132,13 @@ def arrange_faces_uv(uv_num,t,sub,mrgn):
                     uv=loop[fp_layer].uv
                     x,y=bind_loops[i]
 
-                    uv.x=x+uv_num
+                    uv.x=x
                     uv.y=y
 
-        bmesh.update_edit_mesh(obj.data)
-        uv_co.clear()
+            bmesh.update_edit_mesh(obj.data)
+            uv_co.clear()
+            face_co.clear()
+
 
 def menu_func(self,context):
     layout=self.layout
