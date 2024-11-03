@@ -1,5 +1,5 @@
 bl_info={
-    "name":"Pixel Keeping",
+    "name":"PixelKeeping",
     "author":"ura",
     "version":(1,1,2),
     "blender":(4,2,0),
@@ -23,12 +23,9 @@ pixel_count=[
 
 import bpy
 import bmesh
-from math import sqrt
-from mathutils import Vector
-from collections import defaultdict
 
 class UV_OT_uv_pixel_keeping(bpy.types.Operator):
-    bl_idname="uv.uv_pixel_keeping"
+    bl_idname="uv.pixel_keeping"
     bl_label="Arrange faces to UV"
     bl_options={'REGISTER','UNDO'}
 
